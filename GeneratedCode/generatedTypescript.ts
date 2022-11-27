@@ -2,7 +2,7 @@
 // Api Class
 
 // 
-// Nov 27, 2022 20:20:34 UTC
+// Nov 27, 2022 21:44:36 UTC
 //
 
 export interface ApiRestResponse {
@@ -206,11 +206,54 @@ export interface ApiRestResponse {
   const api = new Api("http://localhost:8080");
 
 // Global Declarations 
-export type MySecialArray<T> = T[];
+export type Nullable<T> = T | null;
 
 export type Record<K extends string | number | symbol, T> = { [P in K]: T; }
 
-export type Nullable<T> = T | null;
+export type MySecialArray<T> = T[];
+
+
+//
+// namespace server
+//
+
+export namespace server {
+
+export interface FormRequest {
+	req: string;
+	count: number;
+}
+
+
+export interface FormResponse {
+	test: string;
+}
+
+
+export interface HTTPResponse {
+	data: unknown;
+	error: unknown;
+}
+
+
+// Typescript: TSEndpoint= path=/post;  name=Post; method=POST; request=FormRequest; response=FormResponse
+// server/server.go Line: 66
+export const Post = async (data: FormRequest):Promise<{ data:FormResponse; error: Nullable<string> }> => {
+	return await api.POST("/post", data) as { data: FormResponse; error: Nullable<string> };
+}
+
+// Typescript: TSEndpoint= path=/ping; name=Ping; method=GET; response=string
+// server/server.go Line: 53
+export const Ping = async ():Promise<{ data:string; error: Nullable<string> }> => {
+	return await api.GET("/ping") as { data: string; error: Nullable<string> };
+}
+
+// Typescript: TSEndpoint= path=/pingparams/:len/*lat;  name=PingParams; method=GET; response=string
+// server/server.go Line: 59
+export const PingParams = async (len: string, lat: Nullable<string>):Promise<{ data:string; error: Nullable<string> }> => {
+	return await api.GET(`/pingparams/${len}/${lat}`) as { data: string; error: Nullable<string> };
+}
+}
 
 
 //
@@ -264,20 +307,13 @@ export type Direction = typeof EnumDirection[keyof typeof EnumDirection]
 
 export type Season = typeof EnumSeason[keyof typeof EnumSeason] 
 
-export type TestTypeTime = Date
-
 export type Test = typeof EnumTest[keyof typeof EnumTest] 
 
 export type MyType = number
 
 export type TestTypeStruct = TestStruct
 
-export const EnumSeason = {
-Summer: "summer",
-Autumn: "autumn",
-Winter: "winter",
-Spring: "spring",
-} as const
+export type TestTypeTime = Date
 
 export const EnumTest = {
 A: 0,
@@ -293,54 +329,18 @@ South: 2,
 West: 3,
 } as const
 
+export const EnumSeason = {
+Summer: "summer",
+Autumn: "autumn",
+Winter: "winter",
+Spring: "spring",
+} as const
+
 export const Timeout = 1000
 
 export const Uno = "uno"
 
 export const Cento = 100
 
-}
-
-
-//
-// namespace server
-//
-
-export namespace server {
-
-export interface FormResponse {
-	test: string;
-}
-
-
-export interface HTTPResponse {
-	data: unknown;
-	error: unknown;
-}
-
-
-export interface FormRequest {
-	req: string;
-	count: number;
-}
-
-
-// Typescript: TSEndpoint= path=/pingparams/:len/*lat;  name=PingParams; method=GET; response=string
-// server/server.go Line: 59
-export const PingParams = async (len: string, lat: Nullable<string>):Promise<{ data:string; error: Nullable<string> }> => {
-	return await api.GET(`/pingparams/${len}/${lat}`) as { data: string; error: Nullable<string> };
-}
-
-// Typescript: TSEndpoint= path=/postTest;  name=Post; method=POST; request=FormRequest; response=FormResponse
-// server/server.go Line: 66
-export const Post = async (data: FormRequest):Promise<{ data:FormResponse; error: Nullable<string> }> => {
-	return await api.POST("/postTest", data) as { data: FormResponse; error: Nullable<string> };
-}
-
-// Typescript: TSEndpoint= path=/ping; name=Ping; method=GET; response=string
-// server/server.go Line: 53
-export const Ping = async ():Promise<{ data:string; error: Nullable<string> }> => {
-	return await api.GET("/ping") as { data: string; error: Nullable<string> };
-}
 }
 

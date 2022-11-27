@@ -63,7 +63,7 @@ func Server() {
 		c.JSON(http.StatusOK, response)
 	})
 
-	// Typescript: TSEndpoint= path=/postTest;  name=Post; method=POST; request=FormRequest; response=FormResponse
+	// Typescript: TSEndpoint= path=/post;  name=Post; method=POST; request=FormRequest; response=FormResponse
 	r.POST("/post", func(c *gin.Context) {
 		var requestBody FormRequest
 		if err := c.BindJSON(&requestBody); err != nil {
